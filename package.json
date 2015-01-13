@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/pwcberry/experiments",
   "devDependencies": {
-    "grunt-contrib-connect": "^0.9.0"
+    "gulp": "^3.8.10",
+    "gulp-server-livereload": "^1.0.1"
   }
 }

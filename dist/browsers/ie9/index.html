@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>JavaScript deterioration | window | IE9</title>
+</head>
+<body>
+<div class="column">
+    <div class="input-group">
+        <button type="button" id="Open-Window-Btn">Open Window</button>
+    </div>
+    <div id="Output" class="output">
+        <h2>Output</h2>
+    </div>
+</div>
+</body>
+<script>
+    var Experiment = (function () {
+        var popup,
+                words = [
+                    'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
+                ];
+
+        function addText(el, text) {
+            var p;
+            p = document.createElement('p');
+            p.innerText = text;
+            return el.appendChild(p);
+        }
+
+        document.getElementById('Open-Window-Btn').addEventListener('click', function () {
+            popup = window.open('index-popup.html', 'popup', 'width=400, height=300, scrollbars=no, resizable=yes');
+            popup.focus();
+        });
+
+        return {
+            updateText: function (ids) {
+                var el = document.getElementById('Output'),
+                        limit = words.length,
+                        matches = ids.map(function (i) {
+                            return (i >= 0 && i < limit) ? words[i] : '';
+                        });
+
+                addText(el, 'isArray: ' + Array.isArray(ids));
+                addText(el, 'data: ' + JSON.stringify(ids));
+                addText(el, matches.join(' : '));
+            }
+        };
+    }());
+</script>
+</html>

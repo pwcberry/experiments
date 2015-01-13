@@ -42,8 +42,9 @@
                         });
 
                 addText(el, 'isArray: ' + Array.isArray(ids));
-                addText(el, 'data: ' + JSON.stringify(ids));
-                addText(el, matches.join(' : '));
+                addText(el, 'length: ' + ids.length);
+                addText(el, 'ids: ' + JSON.stringify(ids));
+                addText(el, 'fruit bowl: ' + matches.join(' : '));
             }
         };
     }());

@@ -83,7 +83,7 @@
         }
 
         var handleClick = function(event) {
-            var actionFor = event.target.dataset.actionFor;
+            var actionFor = event.target.dataset ? event.target.dataset.actionFor : event.target.getAttribute('data-action-for');
             switch(actionFor) {
                 case'array': sendArray(); break;
                 case 'regexp': sendRegExp();break;

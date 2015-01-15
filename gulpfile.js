@@ -26,12 +26,4 @@ gulp.task('make', function () {
     ]);
 });
 
-gulp.task('save-pages', function () {
-    shellActions([
-        ['git fetch origin gh-pages', ''],
-        ['git merge -s ours origin/gh-pages', ''],
-        ['git push origin gh-pages', '']
-    ]);
-});
-
 gulp.task('default', ['serve']);

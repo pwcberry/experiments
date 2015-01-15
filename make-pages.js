@@ -24,7 +24,9 @@ module.exports = function () {
     var actions, commands = [
         'git branch -D gh-pages',
         'git branch gh-pages',
-        'git rebase master gh-pages'
+        'git rebase master gh-pages',
+        'rm *.*',
+        'cp -r dist/* .'
     ];
 
     commands.reverse().forEach(function (cmd, index) {

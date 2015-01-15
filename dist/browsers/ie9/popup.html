@@ -77,9 +77,14 @@
         function sendMessage() {
             var msg = messageTextBox.value || 'Quietly spoken';
 
-            window.opener.postMessage({
-                message: msg.trim()
-            }, window.location.origin);
+            try {
+                window.opener.postMessage({
+                    message: msg.trim()
+                }, window.location.origin);
+            } catch(e) {
+                alert('Your browser doesn\'t support the Messaging Channel');
+                // From IE10 onwards: http://msdn.microsoft.com/en-us/library/ie/hh673525(v=vs.85).aspx
+            }
         }
 
         var handleClick = function(event) {

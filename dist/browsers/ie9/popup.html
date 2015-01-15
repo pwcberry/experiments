@@ -11,10 +11,14 @@
     </div>
     <div class="form-actions">
         <button type="button" id="Submit-Btn">Submit</button>
+        <button type="button" id="Send-RegExp-Btn">Send RegExp</button>
+        <button type="button" id="Send-Date-Btn">Send Date</button>
     </div>
 </form>
 <script>
     (function () {
+        'use strict';
+
         var words = [
                     'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
                 ],
@@ -34,9 +38,11 @@
     }());
 
     (function () {
-        var context = window.opener.Experiment, elements = document.forms['Words'].word;
+        var getId = function (id) {
+            return document.getElementById(id);
+        }, context = window.opener.Experiment, elements = document.forms['Words'].word;
 
-        document.getElementById('Submit-Btn').addEventListener('click', function () {
+        getId('Submit-Btn').addEventListener('click', function () {
             var ids = [];
 
             for (var i = 0, j = elements.length; i < j; i += 1) {
@@ -48,6 +54,16 @@
             context.updateText(ids);
             window.close();
         });
+
+        getId('Send-RegExp-Btn').addEventListener('click', function () {
+            var regExp = /A[a-z]+e/i;
+            context.checkRegExp(regExp);
+        });
+
+        getId('Send-Date-Btn').addEventListener('click', function () {
+            var now = new Date();
+            context.updateDate(now);
+        })
     }());
 </script>
 </body>

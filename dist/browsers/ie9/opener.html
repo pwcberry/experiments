@@ -7,6 +7,9 @@
 <body>
 <div class="column">
     <div class="input-group">
+        <input type="text" id="Sample-Text" name="SampleText" value="Apple"/>
+    </div>
+    <div class="form-actions">
         <button type="button" id="Open-Window-Btn">Open Window</button>
     </div>
     <div id="Output" class="output">
@@ -16,6 +19,8 @@
 </body>
 <script>
     var Experiment = (function () {
+        'use strict';
+
         var popup,
                 words = [
                     'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
@@ -45,6 +50,38 @@
                 addText(el, 'length: ' + ids.length);
                 addText(el, 'ids: ' + JSON.stringify(ids));
                 addText(el, 'fruit bowl: ' + matches.join(' : '));
+            },
+
+            updateDate: function (inputDate) {
+                // 'date' is equivalent to date.valueOf()
+                var outputDate, el = document.getElementById('Output');
+
+                if (typeof inputDate == 'number') {
+                    outputDate = new Date(inputDate);
+                    addText(el, 'Date as a number: ' + outputDate.toISOString());
+                } else if (typeof inputDate.setDate == 'function') {
+                    addText(el, 'Date: ' + inputDate.toLocaleString());
+                } else {
+                    addText(el, 'Not a Date object');
+                    try {
+                    addText(el, 'Object: ' + JSON.stringify(inputDate));
+                    } catch(ex) {
+                        addText(el, 'Definitely not an object').className='message error';
+                    }
+                }
+            },
+
+            checkRegExp: function (regExp) {
+                var inputText = document.getElementById('Sample-Text').value.trim(),
+                        el = document.getElementById('Output');
+
+                if (typeof regExp.test == 'function') {
+                    addText(el, 'RegExp result: ' + (regExp.test(inputText)));
+                    addText(el, 'It\'s a regular expression!');
+                } else {
+                    addText(el, 'Invalid regular expression!');
+                    addText(el, 'Object: ' + JSON.stringify(regExp));
+                }
             }
         };
     }());

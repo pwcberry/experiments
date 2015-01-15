@@ -23,9 +23,8 @@ function addShellAction(command, next) {
 module.exports = function () {
     var actions, commands = [
         'git branch -D gh-pages',
-        'git checkout -b gh-pages',
-        'git add --all .',
-        'git commit -m "Made pages"'
+        'git branch gh-pages',
+        'git rebase master gh-pages'
     ];
 
     commands.reverse().forEach(function (cmd, index) {
@@ -41,3 +40,8 @@ module.exports = function () {
     }
 };
 
+/*
+ ,
+ 'git add --all .',
+ 'git commit -m "Made pages"'
+ */

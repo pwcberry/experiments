@@ -1,5 +1,6 @@
 var gulp = require('gulp'),
-    server = require('gulp-server-livereload');
+    server = require('gulp-server-livereload'),
+    makePages = require('./make-pages');
 
 
 gulp.task('serve', function () {
@@ -11,5 +12,7 @@ gulp.task('serve', function () {
             port: 12000
         }));
 });
+
+gulp.task('make', makePages);
 
 gulp.task('default', ['serve']);

@@ -10,9 +10,20 @@
 
     </div>
     <div class="form-actions">
-        <button type="button" id="Submit-Btn">Submit</button>
-        <button type="button" id="Send-RegExp-Btn">Send RegExp</button>
-        <button type="button" id="Send-Date-Btn">Send Date</button>
+        <button type="button" data-action-for="array" id="Submit-Btn">Submit</button>
+        <button type="button" data-action-for="regexp" id="Send-RegExp-Btn">Send RegExp</button>
+        <button type="button" data-action-for="date" id="Send-Date-Btn">Send Date</button>
+    </div>
+</form>
+<form id="Messaging-Form" name="Messaging">
+    <div class="form-body">
+        <h2>Send a message</h2>
+        <div class="input-group input-multiline-text">
+            <textarea name="theMessage" rows="4" cols="80">Message in a bottle</textarea>
+        </div>
+    </div>
+    <div class="form-actions">
+        <button type="button" data-action-for="message" id="Send-Message-Btn">Send Message</button>
     </div>
 </form>
 <script>
@@ -22,15 +33,15 @@
         var words = [
                     'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
                 ],
-                form = document.forms['Words'],
-                formBody = form.querySelector('.form-body'),
+                wordFormBody = document.getElementById('Words-Form').querySelector('.form-body'),
                 html = '<input type="checkbox" name="word" value="{{index}}" id="Word-{{index}}"/><label for="Word-{{index}}">{{word}}</label>';
 
         function addCheckbox(word, index) {
             var div = document.createElement('div');
+
             div.className = 'input-group input-checkbox';
             div.innerHTML = html.replace(/\{\{index\}\}/g, index).replace("{{word}}", word);
-            formBody.appendChild(div);
+            wordFormBody.appendChild(div);
         }
 
         words.forEach(addCheckbox);
@@ -38,32 +49,52 @@
     }());
 
     (function () {
-        var getId = function (id) {
-            return document.getElementById(id);
-        }, context = window.opener.Experiment, elements = document.forms['Words'].word;
+        var context = window.opener.Experiment, checkboxes = document.forms['Words'].word, messageTextBox = document.forms['Messaging'].theMessage;
 
-        getId('Submit-Btn').addEventListener('click', function () {
+        function sendArray() {
             var ids = [];
 
-            for (var i = 0, j = elements.length; i < j; i += 1) {
-                if (elements[i].checked) {
-                    ids.push(parseInt(elements[i].value));
+            for (var i = 0, j = checkboxes.length; i < j; i += 1) {
+                if (checkboxes[i].checked) {
+                    ids.push(parseInt(checkboxes[i].value));
                 }
             }
 
             context.updateText(ids);
             window.close();
-        });
+        }
 
-        getId('Send-RegExp-Btn').addEventListener('click', function () {
+        function sendRegExp() {
             var regExp = /A[a-z]+e/i;
             context.checkRegExp(regExp);
-        });
+        }
 
-        getId('Send-Date-Btn').addEventListener('click', function () {
+        function sendDate() {
             var now = new Date();
             context.updateDate(now);
-        })
+        }
+
+        function sendMessage() {
+            var msg = messageTextBox.value || 'Quietly spoken';
+
+            window.opener.postMessage({
+                message: msg.trim()
+            }, window.location.origin);
+        }
+
+        var handleClick = function(event) {
+            var actionFor = event.target.dataset.actionFor;
+            switch(actionFor) {
+                case'array': sendArray(); break;
+                case 'regexp': sendRegExp();break;
+                case 'date': sendDate();break;
+                case 'message': sendMessage(); break;
+                default:
+                    break;
+            }
+        };
+
+        document.body.addEventListener('click', handleClick);
     }());
 </script>
 </body>

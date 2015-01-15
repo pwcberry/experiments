@@ -22,9 +22,10 @@
         'use strict';
 
         var popup,
-                words = [
-                    'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
-                ];
+            outputContainer = document.getElementById('Output'),
+            words = [
+                'apple', 'banana', 'orange', 'pineapple', 'lime', 'pomegranate', 'apricot', 'peach', 'pear', 'strawberry'
+            ];
 
         function addText(el, text) {
             var p;
@@ -34,13 +35,21 @@
         }
 
         document.getElementById('Open-Window-Btn').addEventListener('click', function () {
-            popup = window.open('index-popup.html', 'popup', 'width=400, height=300, scrollbars=no, resizable=yes');
+            popup = window.open('popup.html', 'popup', 'width=620, height=448, scrollbars=no, resizable=yes');
             popup.focus();
+        });
+
+        window.addEventListener('message', function(event) {
+            if (window.location.origin !== event.origin) {
+                throw new URIError('Invalid message origin');
+            }
+
+            addText(outputContainer, event.data.message);
         });
 
         return {
             updateText: function (ids) {
-                var el = document.getElementById('Output'),
+                var el = outputContainer,
                         limit = words.length,
                         matches = ids.map(function (i) {
                             return (i >= 0 && i < limit) ? words[i] : '';
@@ -54,7 +63,7 @@
 
             updateDate: function (inputDate) {
                 // 'date' is equivalent to date.valueOf()
-                var outputDate, el = document.getElementById('Output');
+                var outputDate, el = outputContainer;
 
                 if (typeof inputDate == 'number') {
                     outputDate = new Date(inputDate);
@@ -73,7 +82,7 @@
 
             checkRegExp: function (regExp) {
                 var inputText = document.getElementById('Sample-Text').value.trim(),
-                        el = document.getElementById('Output');
+                        el = outputContainer;
 
                 if (typeof regExp.test == 'function') {
                     addText(el, 'RegExp result: ' + (regExp.test(inputText)));

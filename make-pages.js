@@ -1,8 +1,14 @@
 var cp = require('child_process');
 
-function addShellAction(command, next) {
+function addShellAction(command, message, next) {
     return function () {
-        var shellCmd = cp.exec(command, function (err, stdout) {
+        var shellCmd;
+
+        if (message) {
+            console.log(message);
+        }
+
+        shellCmd = cp.exec(command, function (err, stdout) {
             if (!err) {
                 // Show git output
                 console.log(stdout);
@@ -22,22 +28,23 @@ function addShellAction(command, next) {
 
 module.exports = function () {
     var actions, commands = [
-        'git branch -D gh-pages',
-        'git branch gh-pages',
-        'git rebase master gh-pages',
-        'rm -rf node_modules',
-        'rm *.*',
-        'cp -r dist/* .',
-        'rm -rf dist',
-        'git add --all .',
-        'git commit -m "Pages Made"'
+        ['git branch -D gh-pages', 'Removing branch "gh-pages"...'],
+        ['git branch gh-pages', 'Adding branch "gh-pages"...'],
+        ['git rebase master gh-pages', 'Merging changes into "gh-pages"...'],
+        ['rm -rf node_modules', 'Removing folders and files...'],
+        ['rm *.*', '...'],
+        ['rm .gitignore', '...'],
+        ['cp -r dist/* .', 'Copying application files into place...'],
+        ['rm -rf dist', 'Removing "dist" folder...'],
+        ['git add --all .', 'Adding changes to repo...'],
+        ['git commit -m "Pages Made"', 'Committing to repo...']
     ];
 
     commands.reverse().forEach(function (cmd, index) {
         if (index === 0) {
-            actions = addShellAction(cmd);
+            actions = addShellAction(cmd[0], cmd[1]);
         } else {
-            actions = addShellAction(cmd, actions);
+            actions = addShellAction(cmd[0], cmd[1], actions);
         }
     });
 
@@ -45,9 +52,3 @@ module.exports = function () {
         actions();
     }
 };
-
-/*
- ,
- 'git add --all .',
- 'git commit -m "Made pages"'
- */

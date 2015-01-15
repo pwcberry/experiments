@@ -25,8 +25,12 @@ module.exports = function () {
         'git branch -D gh-pages',
         'git branch gh-pages',
         'git rebase master gh-pages',
+        'rm -rf node_modules',
         'rm *.*',
-        'cp -r dist/* .'
+        'cp -r dist/* .',
+        'rm -rf dist',
+        'git add --all .',
+        'git commit -m "Pages Made"'
     ];
 
     commands.reverse().forEach(function (cmd, index) {

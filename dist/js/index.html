@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>JavaScript</title>
+    <script src="../script/output.js"></script>
+</head>
+<body>
+<h1>Frozen objects</h1>
+
+<div id="Output-Chamber">
+</div>
+<script>
+    window.addEventListener('load', function () {
+        var o = Object.freeze((function() {
+            var counter = 0;
+
+            return {
+                get name() {
+                    return 'Peter';
+                },
+
+                add: function (n) {
+                    n = n || 1;
+                    return counter += n;
+                }
+            }
+        }()));
+
+        output(o.name);
+        output(o.add());
+        output(o.add());
+        output(o.add(4));
+        output(o.add(8));
+        output('This is ', 3, 'some', 'text');
+    });
+</script>
+</body>
+</html>

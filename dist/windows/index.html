@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accesing elements in another window</title>
+    <style>
+        .output {
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 133%;
+            color: #333;
+            padding: 0.25em 0.6em;
+        }
+
+        .output.info {
+            background-color: #65CBE7;
+            color: #000066;
+        }
+
+        .output.warn {
+            background-color: #C09853;
+            color: #ad6704;
+        }
+
+        .output.error {
+            background-color: #ebcccc;
+            color: #bd362f;
+        }
+    </style>
+</head>
+<body>
+<div class="page-content">
+    <div class="row">
+        <button type="button" id="Start-Btn">Start Tests</button>
+    </div>
+    <div id="Output">
+
+    </div>
+</div>
+<script>
+    var currentWindow;
+
+    function output(s, type) {
+        var container = document.getElementById('Output');
+        var p = document.createElement('p');
+        p.classList.add('output');
+        if (typeof type == 'string') {
+            p.classList.add(type);
+        }
+        p.innerText = s;
+        container.appendChild(p);
+    }
+
+    function makeArray(collection) {
+        return [].splice.call(collection, 0);
+    }
+
+    function selectElements(selector, context) {
+        var elements;
+
+        // Is context specified at all?
+        context = context || currentWindow.document;
+
+        elements = context.querySelectorAll(selector);
+        return elements != null && elements.length ? makeArray(elements) : [];
+    }
+
+    function selectElement(selector, context) {
+        var elements = selectElements(selector, context);
+        return elements.length ? elements[0] : null;
+    }
+
+    function test_1() {
+        var body = currentWindow.document.querySelector('body');
+        var divs = selectElements('div', body);
+        output('TEST 1 > Count: ' + divs.length);
+    }
+
+    function test_2() {
+        var button = selectElement('a.btn.primary-cta-button2');
+        if (button) {
+            output('TEST 2 > Single element: ' + button.outerHTML);
+        } else {
+            output('TEST 2 > Single element: failed', 'error');
+        }
+    }
+
+    function test_3() {
+        var btn, block = selectElement('#copy-block');
+        if (block) {
+            btn = selectElement('a.btn.primary-cta-button2', block);
+            if (btn) {
+                output('TEST 3 > Select via context: ' + btn.outerHTML);
+            } else {
+                throw new Error('Can\'t find button');
+            }
+        } else {
+            throw new Error('Can\'t find "copy-block"');
+        }
+    }
+
+    document.getElementById('Start-Btn').addEventListener('click', function () {
+        var promise = new Promise(function (resolve, reject) {
+            try {
+                currentWindow = window.open('http://localhost/experiments/samples/docker.html', 'currentWindow', 'width=1024, height=400, resizable=1, scrollbars=1');
+                currentWindow.onload = function() {
+                    resolve();
+                };
+            } catch (e) {
+                reject(e.message);
+            }
+        });
+        promise
+            .then(test_1)
+            .then(test_2)
+            .then(test_3)
+            .catch(function (error) {
+                output(error, 'error');
+            });
+    });
+
+</script>
+</body>
+</html>

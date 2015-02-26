@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ECMAScript 5 Properties</title>
+    <script src="../script/output.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var timeoutMessage, args = {};
+            Object.defineProperty(args, 'timeoutMessage', {
+                get: function() {
+                    return timeoutMessage;
+                },
+                set: function(value) {
+                    timeoutMessage = value;
+                    this.timeoutError = new Error(value);
+                }
+            });
+
+            args.timeoutMessage = 'This is an error.';
+            output(args.timeoutError.message);
+            args.timeoutMessage = 'This is another error.';
+            throw args.timeoutError;
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

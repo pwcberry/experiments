@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Popup Windows</title>
+</head>
+<body>
+<h1>Popup Windows</h1>
+
+<p><a id="Open-Win" href="javascript:;">Open the window</a></p>
+<script>
+    (function () {
+        'use strict';
+
+        document.getElementById('Open-Win').addEventListener('click', function () {
+//            var win = window.open('../js/frozen.html', 'popUp', 'scrollbars=yes, resizable=yes, width=640, height=480');
+            var win = window.open('http://www.carsales.com.au', 'popUp','scrollbars=yes, resizable=yes, width=640, height=480');
+            win.addEventListener('load', function(event) {
+                console.info('Window loaded');
+                console.dir(event.target);
+                console.log(Object.getPrototypeOf(event.target));
+            });
+            console.info('window instance: ', (win instanceof Window));
+            console.log('window prototype: ', Object.getPrototypeOf(win));
+//            win.onload = function () {
+//                console.info('This page loaded');
+//            };
+            /*win.document.addEventListener('DOMContentLoaded', function (event) {
+                console.info('Document ready');
+                console.dir(event.target);
+            });*/
+        }, false);
+
+    }());
+</script>
+</body>
+</html>

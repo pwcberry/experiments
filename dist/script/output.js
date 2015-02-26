@@ -53,7 +53,7 @@
         }
     };
 
-    w.html = function (html) {
+    w.addHtml = function (html) {
         var item = document.createElement('div');
         item.className = 'output html';
         item.innerHTML = html;

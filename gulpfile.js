@@ -13,6 +13,11 @@ gulp.task('serve', function () {
         }));
 });
 
+gulp.task('javascript', function() {
+    gulp.src('./src/js/**/*.js')
+        .pipe(gulp.dest('./script'));
+});
+
 gulp.task('make-pages', function () {
     shellActions([
         ['git branch -D gh-pages', 'Removing branch "gh-pages"...'],

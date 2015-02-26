@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Events and SVG</title>
+</head>
+<body>
+    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+        <g>
+        <circle cx="40" cy="40" r="20" fill="#902432"></circle>
+        </g>
+    </svg>
+    <script>
+        (function() {
+            var svg = document.querySelector('svg');
+            svg.addEventListener('click', function() {
+               console.log('SVG clicked');
+            });
+
+            svg.addEventListener('mousedown', function() {
+                svg.getElementsByTagName('g')[0].setAttribute('transform', 'skewX(20)');
+            });
+
+            svg.addEventListener('mouseup', function() {
+                svg.getElementsByTagName('circle')[0].setAttribute('fill', '#0000ff');
+            });
+
+            // The following is not supported by IE11
+            var evt = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+
+            svg.dispatchEvent(evt);
+
+            evt = new MouseEvent('mousedown', {
+                bubbles:true,
+                cancelable: true,
+                view: window
+            });
+
+            setTimeout(function() {
+                svg.dispatchEvent(evt);
+                setTimeout(function() {
+                    evt = new MouseEvent('mouseup', {
+                        bubbles:true,
+                        cancelable:true,
+                        view:window
+                    });
+                    svg.dispatchEvent(evt);
+                }, 1000);
+            }, 2000);
+
+        }());
+    </script>
+</body>
+</html>

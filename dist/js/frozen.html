@@ -27,12 +27,25 @@
             }
         }()));
 
-        output(o.name);
+        output('name: %s', o.name);
         output(o.add());
         output(o.add());
         output(o.add(4));
         output(o.add(8));
         output('This is ', 3, 'some', 'text');
+
+        o.foo = 'bar';
+        output('foo: %s', o.foo);
+
+        // This will throw an error because 'o' is not extensible
+        try {
+            Object.defineProperty(o, 'baz', {
+                value: 'cough cough'
+            });
+            output('baz: %s', o.baz);
+        } catch(e) {
+            output('error: %s', e.message);
+        }
     });
 </script>
 </body>

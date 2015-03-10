@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Synthetic Events</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+            line-height: 133%;
+        }
+        .fat-btn {
+            display:inline-block;
+            text-decoration: none;
+            color: #bd362f;
+            border: 1px solid currentColor;
+            border-radius: 4px;
+            background-color: #df8505;
+        }
+        .btn-inner {
+            line-height: 133%;
+            font-size: 150%;
+            font-family: 'Tahoma', Helvetica, sans-serif;
+            font-weight:bold;
+            text-align: center;
+        }
+        .btn-wrap {
+            display: inline-block;
+            padding: 0.25em 0.5em;
+            width: auto;
+        }
+        button[id^=Click] {
+            margin-right: 1em;
+        }
+    </style>
+</head>
+<body>
+<ol>
+    <li>Click "Show Menu"</li>
+    <li>Click <code>&lt;a&gt;Fat Button&lt;/a&gt;</code></li>
+    <li>Click <code>&lt;a&gt;&lt;span&gt;Fat Button&lt;/span&gt;&lt;/a&gt;</code></li>
+</ol>
+<p>
+    <button id="Click-Btn" type="button">Click 1</button>
+    <button id="Click-2-Btn" type="button">Click 2</button>
+    <button id="Click-3-Btn" type="button">Click 3</button>
+</p>
+<p><a href="#show-menu" id="Show-Menu">Show Menu</a></p>
+<p><a href="#fat-button" id="Fat-Btn" class="btn fat-btn"><span class="btn-wrap"><span class="btn-inner">Fat Button</span></span></a> </p>
+<ul id="Output">
+
+</ul>
+<script>
+    (function () {
+        'use strict';
+        var showMenu = document.getElementById('Show-Menu'),
+                fatBtn = document.getElementById('Fat-Btn'),
+                output = document.getElementById('Output'),
+                print = function (s, color) {
+                    var item = document.createElement('li');
+                    item.innerText = s;
+                    if (color) {
+                        item.style.color = color;
+                    }
+                    output.appendChild(item);
+                }, createClick = function () {
+                    var mouseEvent;
+
+                    if (typeof window.Event === 'function') {
+                        mouseEvent = new MouseEvent('click', {
+                            bubbles: true,
+                            cancelable: true,
+                            view: window
+                        });
+                    } else {
+                        mouseEvent = document.createEvent('MouseEvents');
+                        mouseEvent.initEvent('click', true, true);
+                    }
+
+                    return mouseEvent;
+                };
+
+        document.getElementById('Click-Btn').addEventListener('click', function () {
+            showMenu.dispatchEvent(createClick());
+        }, false);
+
+        document.getElementById('Click-2-Btn').addEventListener('click', function () {
+            fatBtn.dispatchEvent(createClick());
+        }, false);
+
+        document.getElementById('Click-3-Btn').addEventListener('click', function () {
+            fatBtn.querySelector('.btn-inner').dispatchEvent(createClick());
+        }, false);
+
+        showMenu.addEventListener('click', function () {
+            print('Show Menu');
+        }, false);
+
+        fatBtn.addEventListener('click', function() {
+            print('Fat Button', '#bd362f')
+        }, false);
+
+    })();
+</script>
+</body>
+</html>

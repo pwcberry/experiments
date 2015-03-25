@@ -27,7 +27,8 @@ requirejs.config({
     paths: {
         'mocha': '/script/vendor/mocha',
         'expect': '/script/vendor/expect',
-        'Q': '/script/vendor/q'
+        'Q': '/script/vendor/q',
+        'browser': '/script/browser'
     /*
          'tests': '/script/tests',
          'specs': '/script/tests/specs'*/
@@ -42,7 +43,7 @@ define(function (require) {
 
     mocha.setup('bdd');
 
-    require(['./specs/promise'], function () {
+    require(['./specs/promise', './specs/form'], function () {
         mocha.run();
     });
 });

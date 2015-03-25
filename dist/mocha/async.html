@@ -7,10 +7,35 @@
 <!--    <script src="../script/vendor/q.js"></script>
     <script src="../script/vendor/mocha.js"></script>-->
     <script src="../script/vendor/expect.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        main {
+            width: 1024px;
+            margin : 20px auto;
+        }
+        #Output {
+            border: 1px solid #666;
+            width: 600px;
+            height: 600px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            float: left;
+        }
+        #mocha {
+            width: 400px;
+           float: left;
+            margin: 0 0 0 20px;
+        }
+    </style>
 </head>
 <body>
+<main>
 <h1>Mocha, Async & Promises</h1>
+<iframe id="Output" name="Output"></iframe>
 <div id="mocha"></div>
+</main>
 <script data-main="../script/tests/mocha-runner" src="../script/require.js"></script>
 </body>
 </html>

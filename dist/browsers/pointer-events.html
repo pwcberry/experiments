@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Pointer and Mouse Events</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 133%;
+        }
+
+        .main {
+            width: 1024px;
+            min-height: 768px;
+            margin: 20px auto;
+            -moz-box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            -ms-box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        nav {
+            width: 160px;
+            margin-right: 30px;
+            background-color: #ebcccc;
+            border: 1px solid #e0f0d9;
+        }
+
+        nav ul {
+            width: 160px;
+            list-style-type:none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            width: 100%;
+            display: block;
+            position: relative;
+        }
+
+        nav a {
+            width: 100%;
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        nav a:hover,
+        nav li.hover > a {
+            color: #FFF;
+            background-color: #333;
+        }
+
+        nav li > ul {
+            display: none;
+            position: absolute;
+            z-index: 10;
+            left: calc(100% - 1px);
+            top: 0;
+            background-color: #c0c0c0;
+            border: 1px solid #b8b8b8;
+        }
+
+        /*nav  li:hover > ul,*/
+        nav li.hover > ul{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<article class="main">
+    <nav>
+        <ul>
+            <li><a href="#">Item 1</a></li>
+            <li><a href="#">Item 2</a>
+                <ul>
+                    <li><a href="#">Sub-Item 1</a></li>
+                    <li><a href="#">Sub-Item 2</a></li>
+                    <li><a href="#">Sub-Item 3</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <div class="actions">
+        <button type="button" id="Hover-Btn">Show Hover</button>
+    </div>
+</article>
+<script src="../script/simulate-event.js"></script>
+<script>
+    (function () {
+        var isHovering = false, item = document.querySelectorAll('nav > ul > li')[1],
+                events = ['mouseover', 'mouseout'];
+
+        if (Simulate.isPointerSupported) {
+            events[0] = 'pointerover';
+            events[1] = 'pointerout';
+        }
+
+        item.addEventListener(events[0], function() {
+           item.classList.add('hover');
+        });
+
+        item.addEventListener(events[1], function () {
+           item.classList.remove('hover');
+        });
+
+        document.getElementById('Hover-Btn').addEventListener('click', function () {
+            if (!isHovering) {
+                isHovering = true;
+                Simulate.event(item.querySelector('a'), 'mouseenter');
+                Simulate.event(item.querySelector('a'), 'mouseover');
+            } else {
+                isHovering = false;
+                Simulate.event(item.querySelector('a'), 'mouseout');
+            }
+        });
+    }());
+</script>
+</body>
+</html>

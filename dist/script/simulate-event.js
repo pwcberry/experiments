@@ -1,4 +1,6 @@
 ﻿(function (Simulate) {
+    /* This script only supports evergreen browsers and IE 11 */
+
     'use strict';
 
     /* Helpers */
@@ -8,7 +10,7 @@
         isString = function (o) {
             return typeof o === 'string';
         },
-        /* Mix source object with another object */
+    /* Mix source object with another object */
         mix = function (source, mixer) {
             var result = {};
             Object.keys(source).forEach(function (key) {
@@ -20,11 +22,11 @@
             return result;
         },
 
-        /* Environment */
+    /* Environment */
         isPointerSupported = (navigator.pointerEnabled !== undefined),
         isEventConstructorsSupported = isFunction(window.Event),
 
-        /* Events */
+    /* Events */
 
         pointerEvents = {
             pointerdown: true,
@@ -65,7 +67,7 @@
             select: true
         },
 
-        // UI Events that bubble
+    // UI Events that bubble
         bubbleEvents = {
             input: true,
             scroll: true,
@@ -75,7 +77,7 @@
             select: true
         },
 
-        /* Default event options used for event initialization */
+    /* Default event options used for event initialization */
 
         defaultEventInit = {
             bubbles: true,
@@ -87,7 +89,7 @@
             detail: 0
         }),
 
-        // KeyEvent extends UIEvent
+    // KeyEvent extends UIEvent
         defaultKeyEventInit = mix(defaultUIEventInit, {
             key: '',
             code: '',
@@ -103,7 +105,7 @@
             which: 0 /* optional, deprecated */
         }),
 
-        // MouseEvent extends UIEvent
+    // MouseEvent extends UIEvent
         defaultMouseEventInit = mix(defaultUIEventInit, {
             screenX: 0,
             screenY: 0,
@@ -118,7 +120,7 @@
             relatedTarget: null
         }),
 
-        /* See: http://www.w3.org/TR/pointerevents/#pointer-events-and-interfaces */
+    /* See: http://www.w3.org/TR/pointerevents/#pointer-events-and-interfaces */
         defaultPointerEventInit = mix(defaultMouseEventInit, {
             width: 0,
             height: 0,
@@ -130,7 +132,7 @@
             isPrimary: false
         }),
 
-        /* Determine if the element is a hyperlink */
+    /* Determine if the element is a hyperlink */
         isHyperlink = function (target) {
             var currentUrl, linkUrl,
                 isLink = target.tagName.toLowerCase() === 'a' && target.hasAttribute('href') && target.href.length > 0;
@@ -150,15 +152,9 @@
 
     /**
      * Simulates a UI event using the given event information to populate
-     * the generated event object. 
+     * the generated event object.
      *
      * For further information about KeyboardEvent, see: https://developer.mozilla.org/en-US/docs/Web/API/UIEvent/UIEvent.
-     *
-     * @param {HTMLElement} target The target for the given event
-     * @param {String} type The type of event to fire. This can be any one 
-     *      of the following: .
-     * @param {Object} options The initializer values for the event.
-     * @ignore
      */
     Simulate.uiEvent=function (target, type, options) {
         var eventInit = mix(defaultKeyEventInit, options),
@@ -183,14 +179,8 @@
      * the generated event object.
      *
      * For further information about KeyboardEvent, see: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/KeyboardEvent.
-     *
-     * @param {HTMLElement} target The target for the given event
-     * @param {String} type The type of event to fire. This can be any one 
-     *      of the following: keyup, keydown, and keypress.
-     * @param {Object} options The initializer values for the event.
-     * @ignore
      */
-     Simulate.keyEvent=function(target, type, options) {
+    Simulate.keyEvent=function(target, type, options) {
         var eventInit = mix(defaultKeyEventInit, options),
             targetDoc = target.ownerDocument,
             modifiers = [],
@@ -233,14 +223,8 @@
      * the generated event object.
      *
      * For further information about MouseEvent, see https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/MouseEvent.
-     *
-     * @param {HTMLElement} target The target for the given event
-     * @param {String} type The type of event to fire. This can be any one 
-     *      of the following: .
-     * @param {Object} options The initializer values for the event.
-     * @ignore
      */
-     Simulate.mouseEvent = function(target, type, options) {
+    Simulate.mouseEvent = function(target, type, options) {
         var eventInit = mix(defaultMouseEventInit, options),
             targetDoc = target.ownerDocument,
             customEvent;
@@ -260,14 +244,8 @@
      * the generated event object.
      *
      * For further information about PointerEvent, see https://msdn.microsoft.com/en-us/library/ie/hh772103(v=vs.85).aspx.
-     *
-     * @param {HTMLElement} target The target for the given event
-     * @param {String} type The type of event to fire. This can be any one 
-     *      of the following: keyup, keydown, and keypress.
-     * @param {Object} options The initializer values for the event.
-     * @ignore
      */
-     Simulate.pointerEvent=function(target, type, options) {
+    Simulate.pointerEvent=function(target, type, options) {
         var eventInit = mix(defaultPointerEventInit, options),
             targetDoc = target.ownerDocument,
             customEvent;
@@ -326,7 +304,6 @@
      * @param {Boolean} [options.repeat=false] Set to true to indicate that the key pressed is kept down for a period of time. (KeyboardEvent)
      * @param {Number} [options.location=0] Set the location of the key pressed according to the keyboard. (KeyboardEvent)
      * @param {Boolean} [options.isComposing=false] Set to true if the event is part of a composition sequence. (KeyboardEvent)
-     * @member window
      */
     Simulate.event = function(target, type, options) {
         options = options || {};
@@ -349,31 +326,35 @@
         }
 
         if (isPointerSupported) {
+
+            if (/^mouse/.test(type)) {
+                options.pointerType = 'mouse';
+            }
+
             switch (type) {
-            case 'mousedown':
-                Simulate.pointerEvent(target, 'pointerdown', options);
-                return;
-            case 'mouseup':
-                Simulate.pointerEvent(target, 'pointerup', options);
-                return;
-            case 'mousemove':
-                Simulate.pointerEvent(target, 'pointermove', options);
-                return;
-            case 'mouseover':
-                //Simulate.pointerEvent(target, 'pointerenter', options);
-                Simulate.pointerEvent(target, 'pointerover', options);
-                return;
-            case 'mouseout':
-                Simulate.pointerEvent(target, 'pointerout', options);
-                return;
-            case 'mouseenter':
-                Simulate.pointerEvent(target, 'pointerenter', options);
-                return;
-            case 'mouseleave':
-                Simulate.pointerEvent(target, 'pointerleave', options);
-                return;
-            default:
-                break;
+                case 'mousedown':
+                    Simulate.pointerEvent(target, 'pointerdown', options);
+                    return;
+                case 'mouseup':
+                    Simulate.pointerEvent(target, 'pointerup', options);
+                    return;
+                case 'mousemove':
+                    Simulate.pointerEvent(target, 'pointermove', options);
+                    return;
+                case 'mouseover':
+                    Simulate.pointerEvent(target, 'pointerover', options);
+                    return;
+                case 'mouseout':
+                    Simulate.pointerEvent(target, 'pointerout', options);
+                    return;
+                case 'mouseenter':
+                    Simulate.pointerEvent(target, 'pointerenter', options);
+                    return;
+                case 'mouseleave':
+                    Simulate.pointerEvent(target, 'pointerleave', options);
+                    return;
+                default:
+                    break;
             }
         }
 
@@ -392,5 +373,5 @@
 
     Simulate.isPointerSupported = isPointerSupported;
     Simulate.isEventConstructorsSupported = isEventConstructorsSupported;
-    
+
 }((window.Simulate = {})));

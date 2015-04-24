@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Ajax Intercept</title>
+    <script src="../script/output.js"></script>
+    <style>
+        main {
+            width: 1024px;
+            margin: 20px auto;
+            min-height: 384px;
+            box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #F8F8F8;
+        }
+
+        .input-group {
+            float: left;
+            width: 100%;
+            padding: 32px 0;
+            box-sizing: border-box;
+        }
+
+        #Output-Chamber {
+            float: left;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="input-group">
+        <button id="RunBtn">Run Ajax</button>
+    </div>
+    <div id="Output-Chamber"></div>
+</main>
+<script src="../script/ajax-siphon.js"></script>
+<script>
+    (function () {
+        document.getElementById('RunBtn').addEventListener('click', function () {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/experiments/dist/data/cars/results.json', true);
+            xhr.onload = function () {
+                output(this.responseText);
+            };
+            xhr.send();
+        });
+    }())
+</script>
+</body>
+</html>

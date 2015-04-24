@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Keyboard Events</title>
+    <script src="../script/output.js"></script>
+    <style>
+        main {
+            width: 1024px;
+            margin: 20px auto;
+            min-height: 384px;
+            box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #F8F8F8;
+        }
+
+        .input-group {
+            float: left;
+            width: 100%;
+            padding: 32px 0;
+            box-sizing: border-box;
+        }
+
+        #Output-Chamber {
+            float: left;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="input-group">
+        <label>Enter text:</label>
+        <input type="text" id="CustomTextField" name="CustomText"/>
+    </div>
+    <div class="input-group">
+        <button id="StartBtn">Start</button>
+    </div>
+    <div id="Output-Chamber"></div>
+</main>
+
+<script src="../script/simulate-event.js"></script>
+<script>
+    (function () {
+        var target = document.getElementById('CustomTextField');
+
+        target.addEventListener('keypress', function (event) {
+            var o = {
+                charCode: event.charCode,
+                code: (event.code || ''),
+                key: (event.key || ''),
+                keyCode: (event.keyCode || '')
+            };
+            output(o);
+            console.dir(event);
+        });
+
+        function simulateKeys() {
+            var code = 'A'.charCodeAt(0);
+
+            Simulate.event(target, 'keydown', {
+                charCode: code,
+                keyCode: code
+            });
+            Simulate.event(target, 'keypress', {
+                charCode: code,
+                keyCode: code
+            });
+        }
+
+        document.getElementById('StartBtn').addEventListener('click', simulateKeys);
+    }());
+</script>
+</body>
+</html>

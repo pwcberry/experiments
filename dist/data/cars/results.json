@@ -1,0 +1,14 @@
+[
+    {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2010,
+        "badge": "Conquest"
+    },
+    {
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2000,
+        "badge": "City"
+    }
+]

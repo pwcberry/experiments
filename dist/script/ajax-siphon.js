@@ -98,7 +98,7 @@ AjaxInterceptor = (function (exports) {
 
     function initStore() {
         var store, data = localStorage.getItem('ajax-siphon');
-        if (typeof store === 'string') {
+        if (typeof data === 'string') {
             try {
                 store = JSON.parse(data);
             } catch (e) {

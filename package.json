@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/pwcberry/experiments",
   "devDependencies": {
-    "gulp": "^3.8.10",
-    "gulp-server-livereload": "^1.0.1"
+    "gulp": "^3.8.11",
+    "gulp-server-livereload": "^1.0.1",
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.5"
   }
 }

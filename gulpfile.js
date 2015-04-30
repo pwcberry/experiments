@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     server = require('gulp-server-livereload'),
-    shellActions = require('./shell-actions');
+    shellActions = require('./shell-actions'),
+    siphon = require('./lib/siphon.js');
 
 
 gulp.task('serve', function () {
@@ -16,6 +17,12 @@ gulp.task('serve', function () {
 gulp.task('javascript', function() {
     gulp.src('./src/js/**/*.js')
         .pipe(gulp.dest('./script'));
+});
+
+gulp.task('siphon', function () {
+   gulp.src('C:\\TFS_Data\\ringtail-siphon-*.json')
+       .pipe(siphon())
+       .pipe(gulp.dest('./data'));
 });
 
 gulp.task('make-pages', function () {

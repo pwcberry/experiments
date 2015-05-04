@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Q Deferreds</title>
+    <script src="../script/output.js"></script>
+    <script src="../script/vendor/q.js"></script>
+</head>
+<body>
+<div id="Output-Chamber"></div>
+<script>
+    (function () {
+        'use strict';
+
+        function pipeOutput(promise) {
+            return promise.then(function (index) {
+                index += 1;
+                output('Data: %s', index);
+                return index;
+            })
+        }
+
+        function main() {
+            var deferred = Q.defer(), counter = 2;
+            var promise = deferred.promise.then(function (data) {
+                output('Then 1');
+                output(data);
+                return data.startIndex;
+            });
+
+            while (counter <= 10) {
+                promise = pipeOutput(promise);
+                counter += 1;
+            }
+
+            Q.fcall(function () {
+                return new Q.Promise(function (resolve) {
+                    output('About to resolve promise...');
+                    setTimeout(function () {
+                        output('Resolving...');
+                        resolve({
+                            name: 'Pete',
+                            title: 'Software guru',
+                            startIndex: 35
+                        });
+                    }, 1000);
+                })
+            })
+                    .then(function (data) {
+                        deferred.resolve(data);
+                    });
+        }
+
+        main();
+
+    }());
+</script>
+</body>
+</html>

@@ -23,7 +23,7 @@
             position: relative;
             width: 250px;
             cursor: pointer;
-            margin-bottom: 10em;
+            margin-bottom: 1em;
         }
 
         .list.active ul {
@@ -63,6 +63,8 @@
             top: 1.8em;
             display: none;
             box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+            z-index: 10000;
         }
 
         .list li {
@@ -135,6 +137,7 @@
             dropDown.appendChild(listSelector);
             var list = document.createElement('ul');
             dropDown.appendChild(list);
+            parent.appendChild(dropDown);
 
             if (Array.isArray(data)) {
                 data.forEach(function (item, index) {
@@ -147,50 +150,48 @@
                     removeBtn.className = 'remove';
                     listItem.appendChild(removeBtn);
                 });
-            }
 
-            parent.appendChild(dropDown);
+                listSelector.addEventListener('click', function (ev) {
+                    hideActiveDropDown();
+                    ev.stopPropagation();
+                    if (parent.classList.contains('active')) {
+                        parent.classList.remove('active');
+                    } else {
+                        parent.classList.add('active');
+                    }
+                });
 
-            listSelector.addEventListener('click', function (ev) {
-                hideActiveDropDown();
-                ev.stopPropagation();
-                if (parent.classList.contains('active')) {
+                list.addEventListener('click', function (ev) {
+                    var value, index, listItem, isDeleting = false, eventSrc = ev.target;
+
+                    if (eventSrc.classList.contains('remove')) {
+                        listItem = eventSrc.parentNode;
+                        isDeleting = true;
+                    } else {
+                        listItem = eventSrc;
+                    }
+                    value = listItem.getAttribute('data-value');
+                    index = listItem.getAttribute('data-index');
+
                     parent.classList.remove('active');
-                } else {
-                    parent.classList.add('active');
-                }
-            });
+                    ev.stopPropagation();
 
-            list.addEventListener('click', function (ev) {
-                var value, index, listItem, isDeleting = false, eventSrc = ev.target;
+                    if (!isDeleting) {
+                        listSelector.innerText = value;
+                    } else {
+                        listItem.parentNode.removeChild(listItem);
+                    }
 
-                if (eventSrc.classList.contains('remove')) {
-                    listItem = eventSrc.parentNode;
-                    isDeleting = true;
-                } else {
-                    listItem = eventSrc;
-                }
-                value = listItem.getAttribute('data-value');
-                index = listItem.getAttribute('data-index');
-
-                parent.classList.remove('active');
-                ev.stopPropagation();
-
-                if (!isDeleting) {
-                    listSelector.innerText = value;
-                } else {
-                    listItem.parentNode.removeChild(listItem);
-                }
-
-                if (typeof selectHandler === 'function') {
-                    selectHandler({
-                        value: value,
-                        index: index,
-                        item: listItem,
-                        isDeleted: isDeleting
-                    });
-                }
-            });
+                    if (typeof selectHandler === 'function') {
+                        selectHandler({
+                            value: value,
+                            index: index,
+                            item: listItem,
+                            isDeleted: isDeleting
+                        });
+                    }
+                });
+            }
         }
 
         function main() {
@@ -208,6 +209,7 @@
 
             // Hide drop downs when they lose focus
             document.body.addEventListener('click', hideActiveDropDown);
+            window.addEventListener('blur', hideActiveDropDown);
         }
 
         main();

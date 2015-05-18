@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        *, *:before, *:after {
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: arial, helvetica, verdana, sans-serif;
+            height: 100%;
+        }
+
+        body {
+            padding: 2em;
+            font-size: 1rem;
+            height: 100%;
+        }
+
+        .list {
+            position: relative;
+            width: 250px;
+            cursor: pointer;
+            margin-bottom: 10em;
+        }
+
+        .list.active ul {
+            display: block;
+        }
+
+        .list > .list-selector {
+            display: block;
+            position: relative;
+            padding-left: 8px;
+            width: 250px;
+            height: 1.8em;
+            line-height: 1.8em;
+            border: 1px solid #999;
+            cursor: pointer;
+        }
+
+        .list > .list-selector::after {
+            position: absolute;
+            width: 20px;
+            height: 1.8em;
+            line-height: 1.8em;
+            right: 0;
+            top: 0;
+            display: inline-block;
+            text-align: center;
+            content: '\0025bc';
+            z-index: 2;
+        }
+
+        .list ul {
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            list-style-type: none;
+            top: 1.8em;
+            display: none;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .list li {
+            cursor: pointer;
+            padding-left: 8px;
+            line-height: 1.8em;
+            border-right: 1px solid #999;
+            border-bottom: 1px solid #bbb;
+            list-style: none;
+            clear: right;
+        }
+
+        .list li:last-of-type {
+            border-bottom: 1px solid #999;
+        }
+
+        .list li:hover {
+            background-color: #efefef;
+        }
+
+        .remove {
+            float: right;
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            color: red;
+        }
+
+        .remove:after {
+            content: 'x';
+        }
+
+        h4 {
+            margin: 10px 0 25px;
+            font-style: italic;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+<a href="http://www.agilealliance.org/the-alliance/the-agile-manifesto/the-twelve-principles-of-agile-software/"
+   target="_blank">The Agile Manifesto, Principle No. 10: "Simplicity"</a>
+<h4>Simplicity - the art of maximizing the amount of work not done - is essential.</h4>
+
+<div class="list remove-items"></div>
+<div class="list remove-items"></div>
+<div class="log"></div>
+<script>
+    (function () {
+        // Transform array-like collections into actual arrays
+        function makeArray(collection) {
+            return Array.prototype.slice.call(collection, 0);
+        }
+
+        function hideActiveDropDown() {
+            var list = document.querySelector('.list.active');
+            if (list !== null) {
+                list.classList.remove('active');
+            }
+        }
+
+        function initDropDown(parent, data, selectHandler) {
+            var dropDown = document.createDocumentFragment();
+            var listSelector = document.createElement('div');
+            listSelector.className = 'list-selector';
+            listSelector.innerText = 'Select...';
+            dropDown.appendChild(listSelector);
+            var list = document.createElement('ul');
+            dropDown.appendChild(list);
+
+            if (Array.isArray(data)) {
+                data.forEach(function (item, index) {
+                    var removeBtn, listItem = document.createElement('li');
+                    listItem.innerText = item;
+                    listItem.setAttribute('data-index', index);
+                    listItem.setAttribute('data-value', item);
+                    list.appendChild(listItem);
+                    removeBtn = document.createElement('span');
+                    removeBtn.className = 'remove';
+                    listItem.appendChild(removeBtn);
+                });
+            }
+
+            parent.appendChild(dropDown);
+
+            listSelector.addEventListener('click', function (ev) {
+                hideActiveDropDown();
+                ev.stopPropagation();
+                if (parent.classList.contains('active')) {
+                    parent.classList.remove('active');
+                } else {
+                    parent.classList.add('active');
+                }
+            });
+
+            list.addEventListener('click', function (ev) {
+                var value, index, listItem, isDeleting = false, eventSrc = ev.target;
+
+                if (eventSrc.classList.contains('remove')) {
+                    listItem = eventSrc.parentNode;
+                    isDeleting = true;
+                } else {
+                    listItem = eventSrc;
+                }
+                value = listItem.getAttribute('data-value');
+                index = listItem.getAttribute('data-index');
+
+                parent.classList.remove('active');
+                ev.stopPropagation();
+
+                if (!isDeleting) {
+                    listSelector.innerText = value;
+                } else {
+                    listItem.parentNode.removeChild(listItem);
+                }
+
+                if (typeof selectHandler === 'function') {
+                    selectHandler({
+                        value: value,
+                        index: index,
+                        item: listItem,
+                        isDeleted: isDeleting
+                    });
+                }
+            });
+        }
+
+        function main() {
+            var log = document.querySelector('.log'),
+                    data = [
+                        ['one', 'two', 'three', 'four', 'five'],
+                        ['cats', 'dogs', 'mice', 'birds', 'hippopotamuses']
+                    ], handleSelect = function (ev) {
+                        log.innerText = (!ev.isDeleted ? 'Selected: ' : 'Removed: ') + ev.value;
+                    };
+
+            makeArray(document.querySelectorAll('.list')).forEach(function (div, index) {
+                initDropDown(div, data[index], handleSelect);
+            });
+
+            // Hide drop downs when they lose focus
+            document.body.addEventListener('click', hideActiveDropDown);
+        }
+
+        main();
+
+    }());
+</script>
+</body>
+</html>

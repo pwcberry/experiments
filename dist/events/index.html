@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Events</title>
+    <script src="../script/output.js"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+            line-height: 133%;
+        }
+
+        main {
+            width: 1024px;
+            margin: 20px auto;
+            padding: 32px;
+            min-height: 384px;
+            box-shadow: 1px 1px rgba(0, 0, 0, 0.1);
+            border: 1px solid #F8F8F8;
+        }
+
+        nav a {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 100%;
+            padding: 8px 12px;
+            box-shadow: 1px 1px 2px rgba(255, 192, 0, 0.5);
+            border-top: 1px solid rgba(255, 192, 16, 0.15);
+            border-left: 1px solid rgba(255, 192, 16, 0.15);
+            text-decoration: none;
+            color: #F0C030;
+            margin-top: 12px;
+        }
+
+        nav a:hover {
+            background-color: #FFFFC0;
+            text-decoration: none;
+            color: #F09000;
+        }
+
+        .lab-samples {
+            float: left;
+            width: 100%;
+            margin-bottom: 32px;
+        }
+
+        .sample {
+            box-sizing: border-box;
+            float: left;
+            padding-right: 20px;
+            width: 320px;
+        }
+
+        .input-group {
+            text-align: center;
+        }
+
+        button {
+            width: 50%;
+            display: inline-block;
+            font-size: 2em;
+            font-weight: bold;
+            padding: 0.25em 0.3em;
+            cursor: pointer;
+        }
+
+        button[data-action="red"] {
+            color: #C00;
+            background: -webkit-linear-gradient(top, #ff9696 0%, #c16868 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #ff9696 0%, #c16868 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #ff9696 0%, #c16868 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #ff9696 0%, #c16868 100%); /* W3C */
+        }
+
+        button[data-action="red"]:hover {
+            background: -webkit-linear-gradient(top, #c16868 0%, #ff9696 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #c16868 0%, #ff9696 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #c16868 0%, #ff9696 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #c16868 0%, #ff9696 100%); /* W3C */
+        }
+
+        button[data-action="blue"] {
+            color: #009;
+            background: -webkit-linear-gradient(top, #7e98d6 0%, #3a45af 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #7e98d6 0%, #3a45af 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #7e98d6 0%, #3a45af 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #7e98d6 0%, #3a45af 100%); /* W3C */
+        }
+
+        button[data-action="blue"]:hover {
+            background: -webkit-linear-gradient(top, #3a45af 0%, #7e98d6 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top, #3a45af 0%, #7e98d6 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top, #3a45af 0%, #7e98d6 100%); /* IE10+ */
+            background: linear-gradient(to bottom, #3a45af 0%, #7e98d6 100%); /* W3C */
+        }
+
+        #Output-Chamber {
+            float: left;
+            width: 100%;
+            border-top: 1px solid #f0b8c0;
+            padding-top: 32px;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <div class="lab-samples">
+        <nav class="nav sample">
+            <a href="#first">First</a>
+            <a href="#second">Second</a>
+            <a href="#third">Third</a>
+            <a href="#fourth">Fourth</a>
+            <a href="#fifth">Fifth</a>
+        </nav>
+        <div class="sample input-group">
+            <button type="button" data-action="blue">Blue Pill</button>
+        </div>
+        <div class="sample input-group">
+            <button type="button" data-action="red">Red Pill</button>
+        </div>
+    </div>
+    <div id="Output-Chamber"></div>
+</main>
+<script>
+    (function () {
+        'use strict';
+
+        function getHref(url) {
+            var result = (/\#\w+$/).exec(url);
+            return result !== null ? result[0] : '';
+        }
+
+        let nav = document.getElementsByTagName('nav')[0];
+        nav.addEventListener('click', function (event) {
+            // This event is captured as part of bubbling.
+            var href = event.target.href;
+            if (href) {
+                output(getHref(href) + ' clicked');
+            } else {
+                output('<nav> clicked');
+            }
+        }, false);
+
+        let mainEl = document.getElementsByTagName('main')[0];
+        mainEl.addEventListener('mousedown', function (event) {
+            // This handler executes before the bubbling phase begins.
+
+            var href = event.target.href, tagName = event.target.tagName.toUpperCase();
+            if (href) {
+                output(getHref(href) + ' captured')
+            } else if (tagName === 'BUTTON') {
+                output(`"${event.target.innerText}" captured`);
+            } else {
+                output(`<${tagName}> captured`);
+            }
+        }, true);
+
+
+    }());
+</script>
+</body>
+</html>

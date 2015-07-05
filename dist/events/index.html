@@ -20,6 +20,10 @@
             border: 1px solid #F8F8F8;
         }
 
+        .main-hover {
+            background-color: rgba(16, 16, 16, 0.025);
+        }
+
         nav a {
             box-sizing: border-box;
             display: inline-block;
@@ -124,6 +128,7 @@
 </main>
 <script>
     (function () {
+        // This pragma also activates most ES6 features in Chrome.
         'use strict';
 
         function getHref(url) {
@@ -133,18 +138,23 @@
 
         let nav = document.getElementsByTagName('nav')[0];
         nav.addEventListener('click', function (event) {
-            // This event is captured as part of bubbling.
+            // This is the 2nd phase of event propagation.
             var href = event.target.href;
             if (href) {
                 output(getHref(href) + ' clicked');
             } else {
                 output('<nav> clicked');
             }
+
+            // Don't change the hash fragment in the URL
+            event.preventDefault();
         }, false);
 
         let mainEl = document.getElementsByTagName('main')[0];
         mainEl.addEventListener('mousedown', function (event) {
-            // This handler executes before the bubbling phase begins.
+            // This is the 1st phase of event propagation.
+            // The "true" parameter specifies that this handler is invoked
+            // before the handler on any of the links or buttons in this experiment.
 
             var href = event.target.href, tagName = event.target.tagName.toUpperCase();
             if (href) {
@@ -156,7 +166,28 @@
             }
         }, true);
 
+        mainEl.addEventListener('mousedown', function () {
+            // This is the 3rd phase of event propagation.
+            // If an element at the 2nd phase invokes event.stopPropagation(),
+            // then this function does not execute.
+            output('MAIN element handling "mousedown"');
+        }, false);
 
+        mainEl.addEventListener('mouseenter', function () {
+            this.classList.add('main-hover');
+        });
+
+        mainEl.addEventListener('mouseleave', function () {
+            this.classList.remove('main-hover');
+        });
+
+        document.querySelector('button[data-action="blue"]').addEventListener('mousedown', function (event) {
+            // This is the 2nd phase of event propagation.
+            output('BLUE BUTTON mousedown');
+
+            // This will prevent the second "mousedown" handler on <main> executing as the event bubbles.
+            event.stopPropagation();
+        });
     }());
 </script>
 </body>

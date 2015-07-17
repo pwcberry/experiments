@@ -5,7 +5,7 @@
             if (cls) {
                 item.className = 'output ' + cls;
             }
-            item.innerText = s;
+            item.innerText = item.textContent = s;
             outputChamber.appendChild(item);
         }, appendCode = function (s) {
             var item = document.createElement('p');
@@ -58,6 +58,10 @@
         item.className = 'output html';
         item.innerHTML = html;
         outputChamber.appendChild(item);
+    };
+
+    w.ready = function (fn) {
+        d.addEventListener('DOMContentLoaded', fn);
     };
 
 }(window, document));

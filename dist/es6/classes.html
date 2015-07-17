@@ -3,15 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <title>classes | ES6 Features</title>
+    <link href="./es6.css" type="text/css" rel="stylesheet"/>
     <script src="../script/output.js"></script>
 </head>
 <body>
 <main>
-    <article>
-
-    </article>
-    <footer><a href="./index.html">Index</a></footer>
     <div id="Output-Chamber"></div>
+    <footer><a href="./index.html">Index</a></footer>
+    <script>
+        (function () {
+            'use strict';
+
+            class DocumentFields {
+                static get QuickCode() {
+                    return 164;
+                }
+
+                static get FamilyQuickCode() {
+                    return 165;
+                }
+            }
+
+            class Person {
+                constructor(name) {
+                    this.name = name;
+                }
+                run() {
+                    output(`${this.name} is running`);
+                }
+                get employment() {
+                    var outer = this;
+
+                    return {
+                        get salary() {
+                            return 80000;
+                        },
+                        earn() {
+                            output(`${outer.name} is earning: ${this.salary}`);
+                        }
+                    };
+                }
+            }
+
+           /* var AnotherEnum = {
+                get Red() {
+                    return 1;
+                },
+                get Blue() {
+                    return 2;
+                }
+            };*/
+
+            ready(function () {
+                output('1> QuickCode: %s', DocumentFields.QuickCode);
+                output('2> FamilyQuickCode: %s', DocumentFields.FamilyQuickCode);
+
+//                try {
+//                    DocumentFields.FamilyQuickCode = 170;
+//                    output('3> FamilyQuickCode: %s', DocumentFields.FamilyQuickCode);
+//                } catch (e) {
+//                    output("3> error: %s", e.message);
+//                }
+            });
+
+            ready(function () {
+                var zhe = new Person('Zhe');
+                zhe.run();
+                zhe.employment.earn();
+            });
+        }());
+    </script>
 </main>
 </body>
 </html>

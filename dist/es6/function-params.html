@@ -3,15 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>default + rest + spread | ES6 Features</title>
+    <link href="./es6.css" type="text/css" rel="stylesheet"/>
     <script src="../script/output.js"></script>
 </head>
 <body>
 <main>
-    <article>
-
-    </article>
-    <footer><a href="./index.html">Index</a></footer>
     <div id="Output-Chamber"></div>
+    <footer><a href="./index.html">Index</a></footer>
 </main>
+<script>
+    (function () {
+        'use strict';
+
+        function total(a, ...values) {
+            var sum = values.reduce( (x, y) => (x + y), 0);
+            return a + sum;
+        }
+
+        ready( () => {
+            var result =  total(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            console.log("The result: %s", result);
+            output("rest parameters: %s", result);
+        });
+
+        ready( () => {
+            var even = [2, 4, 6, 8, 10];
+            var numbers = [1, 3, 5, 7, 9, ...even];
+            output("1> spread: %s", numbers);
+            var sum = total(0, ...even);
+            output("2> spread: %s", sum);
+        });
+    }());
+    </script>
 </body>
 </html>

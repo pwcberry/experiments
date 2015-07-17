@@ -3,15 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <title>enhanced object literals | ES6 Features</title>
+    <link href="./es6.css" type="text/css" rel="stylesheet"/>
     <script src="../script/output.js"></script>
 </head>
 <body>
 <main>
-    <article>
-
-    </article>
-    <footer><a href="./index.html">Index</a></footer>
     <div id="Output-Chamber"></div>
+    <footer><a href="./index.html">Index</a></footer>
 </main>
+<script>
+    (function () {
+        'use strict';
+
+        function coords(x, y) {
+            return { x, y };
+        }
+
+        function setConfig() {
+            return {
+                get controller() {
+                    return 'results.documentmenu';
+                },
+                get listeners() {
+                    var temp = {
+                        click(el) {
+                            return this;
+                        }
+                    };
+                    return temp;
+                }
+            };
+        }
+
+        class DocumentMenu {
+            constructor(config) {
+                this.config = config;
+            }
+            init() {
+                output(this.config);
+            }
+        }
+
+        ready(function () {
+            let obj = coords(10, 10);
+            output('x: %s, y: %s', obj.x, obj.y);
+        });
+
+        ready(function () {
+            let config = setConfig();
+            output('controller: %s', config.controller);
+            output('click is a function: %s', typeof config.listeners.click === 'function');
+        });
+
+        ready(function () {
+            let obj = {
+              __proto__: DocumentMenu.prototype,
+                config: {
+                  title: 'Enhanced Object Literal'
+                },
+                init() {
+                    output('anonymous.init();');
+                    super.init();
+                }
+            };
+            obj.init();
+        });
+
+    }());
+</script>
 </body>
 </html>

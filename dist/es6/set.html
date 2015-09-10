@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Set | Types | ECMAScript 6</title>
+    <script src="../script/output.js"></script>
+</head>
+<body>
+<script>
+    (function () {
+        window.addEventListener('load', function () {
+            var headers = [
+                {
+                    "name": "Pragma",
+                    "value": "no-cache"
+                },
+                {
+                    "name": "Origin",
+                    "value": "http://localhost"
+                },
+                {
+                    "name": "Accept-Encoding",
+                    "value": "gzip, deflate"
+                },
+                {
+                    "name": "Host",
+                    "value": "localhost"
+                },
+                {
+                    "name": "Accept-Language",
+                    "value": "en-GB,en-US;q=0.8,en;q=0.6"
+                },
+                {
+                    "name": "Upgrade-Insecure-Requests",
+                    "value": "1"
+                },
+                {
+                    "name": "User-Agent",
+                    "value": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
+                },
+                {
+                    "name": "Content-Type",
+                    "value": "application/x-www-form-urlencoded"
+                },
+                {
+                    "name": "Accept",
+                    "value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
+                },
+                {
+                    "name": "Cache-Control",
+                    "value": "no-cache"
+                },
+                {
+                    "name": "Referer",
+                    "value": "http://localhost/RingtailSTS/?wa=wsignin1.0&wtrealm=http://localhost/Ringtail/&wctx=rm=0&id=passive&ru=%2fRingtail%2fLogout%2fIndex%3fmode%3dSessionTimeout&wct=2015-09-08T02:20:47Z"
+                },
+                {
+                    "name": "Cookie",
+                    "value": "CaseId=0; GroupId=0; GroupName=; culture=en-GB; .ASPXAUTH=F7A34FAA3369AC9FC09AE43DBD08C668F7FA8F1ACF18148E154B45A74125833FB34C45CC0E0A1929623A75813F8384D1DAC274E9E4F522D873819AA482DE61E03274EEBCCFFC93D6078C4CCB06B65ACF74D1D0BA77F78FEAD85B5C2EA1FC3AB417341439FD7BBDFFE3549947593267B833F040BB8997BF068068D09210CF22A7"
+                },
+                {
+                    "name": "Connection",
+                    "value": "keep-alive"
+                },
+                {
+                    "name": "Content-Length",
+                    "value": "8224"
+                }
+            ],
+                    headerMap = new Map();
+
+            headers.forEach(function(h) {
+               headerMap.set(h.name, h.value);
+            });
+
+            output("Content-Type? %s", headerMap.has('Content-Type'));
+            output("Value: %s", headerMap.get('Content-Type'));
+            output("Value: %s", headerMap['Content-Type']);
+        });
+    }());
+</script>
+</body>
+</html>

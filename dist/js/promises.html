@@ -16,14 +16,15 @@
                     lastName: 'Berry'
                 });
             }, 200);
-        })
+            })
                 .then(function (data) {
-                    output(data);
+//                    output(data);
+                    throw new Error('Some error');
                 })
                 .then(function () {
                     addHtml('<p>We\'ve made it this far.</p>')
                 })
-                .fail(function (error) {
+                .catch(function (error) {
                     output('Error: %s', error);
                 });
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>unload | window events</title>
+    <script src="../script/output.js"></script>
+</head>
+<body>
+<script>
+    (function () {
+        window.addEventListener('unload', function (event){
+
+            output('unloading');
+
+            // these lines do not work
+            event.preventDefault();
+            return false;
+        });
+    })();
+</script>
+</body>
+</html>

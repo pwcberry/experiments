@@ -13,6 +13,9 @@
             item.innerHTML = '<pre><code>' + s + '</code></pre>';
             outputChamber.appendChild(item);
         },
+        json = function (o, indent) {
+            return typeof o === 'object' ? JSON.stringify(o, null, (indent || 0)) : o;
+        },
         log = function (s, a) {
             var index, args = [].slice.call(a, 1), argCount = args.length;
             if (typeof s != 'string') {
@@ -21,7 +24,7 @@
             if (s.indexOf('%') >= 0) {
                 index = 0;
                 s = s.replace(/%s/g, function (m) {
-                    return index < argCount ? args[index++] : m;
+                    return index < argCount ? json(args[index++]) : m;
                 });
             } else if (argCount > 0) {
                 s = s + ' ' + args.join(', ');
@@ -30,7 +33,7 @@
         },
         dir = function (o) {
             try {
-                appendCode(JSON.stringify(o, null, 4), 'dir');
+                appendCode(json(o, 4), 'dir');
             } catch (e) {
                 appendLine(e.message, 'error');
             }
